@@ -1,0 +1,562 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bunga untuk kamu</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 35%,
+        #506c68, #203b43 60%, #101c29);
+    font-family: Georgia, serif;
+}
+
+.scene {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.moon {
+    position: absolute;
+    top: 9%;
+    right: 17%;
+    width: 100px;
+    height: 100px;
+    background: #fff0ce;
+    border-radius: 50%;
+    box-shadow: 0 0 65px #fff0ce88;
+}
+
+.ground {
+    position: absolute;
+    bottom: -90px;
+    width: 130%;
+    height: 180px;
+    border-radius: 50% 50% 0 0;
+    background: linear-gradient(#405a40, #172a21);
+    z-index: 6;
+}
+
+/* TAMAN */
+
+.garden {
+    position: absolute;
+    bottom: 50px;
+    width: 650px;
+    height: 650px;
+}
+
+/* TANGKAI */
+
+.rose {
+    position: absolute;
+    bottom: 0;
+    width: 200px;
+    height: var(--height);
+    left: var(--left);
+}
+
+/* BATANG */
+
+.stem {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 12px;
+    height: 0;
+    border-radius: 100%;
+    background: linear-gradient(90deg,
+        #214a30, #82a75c, #315d39);
+    transform: translateX(-50%) rotate(var(--curve));
+    transform-origin: bottom;
+    animation: growStem 3.5s var(--grow-delay) forwards;
+    z-index: 3;
+
+}
+
+@keyframes growStem {
+    to { height: 100%; }
+}
+
+/* DAUN */
+
+.leaf {
+    position: absolute;
+    width: 115px;
+    height: 58px;
+    background: linear-gradient(135deg,
+        #a1c778, #477a43 65%, #24482d);
+    border-radius: 0 100% 0 100%;
+    box-shadow: inset -7px -7px 10px #183e2a66;
+    opacity: 0;
+    z-index: 4;
+}
+
+.leaf::before {
+    content: "";
+    position: absolute;
+    width: 90%;
+    height: 2px;
+    top: 50%;
+    left: 5%;
+    background: #d1e4a088;
+    transform: rotate(-12deg);
+}
+
+.leaf.left {
+    bottom: 30%;
+    left: -25px;
+    transform-origin: right;
+    animation: leafLeft 2s var(--leaf-delay) forwards;
+}
+
+.leaf.right {
+    bottom: 53%;
+    right: -25px;
+    transform: rotate(180deg) scale(0);
+    transform-origin: left;
+    animation: leafRight 2s var(--leaf-delay) forwards;
+}
+
+@keyframes leafLeft {
+    to {
+        opacity: 1;
+        transform: rotate(-25deg) scale(1);
+    }
+}
+
+@keyframes leafRight {
+    to {
+        opacity: 1;
+        transform: rotate(155deg) scale(1);
+    }
+}
+
+/* DURI */
+
+.thorn {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 20px solid #93a968;
+    opacity: 0;
+    animation: show 1s var(--thorn-delay) forwards;
+}
+
+.thorn.left {
+    bottom: 40%;
+    left: calc(50% - 8px);
+    transform: rotate(-45deg);
+}
+
+.thorn.right {
+    bottom: 68%;
+    left: calc(50% + 5px);
+    transform: rotate(45deg);
+}
+
+/* KEPALA MAWAR */
+
+.flower {
+    position: absolute;
+
+    /* Titik tengah bunga tepat di pucuk batang */
+    left: 50%;
+    top: calc(var(--flower-size) / -2);
+
+    width: var(--flower-size);
+    height: var(--flower-size);
+
+    transform: translateX(-50%);
+    transform-origin: center;
+
+    opacity: 0;
+    animation: show 1s var(--flower-delay) forwards;
+
+    z-index: 7;
+}
+
+.petal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--w);
+    height: var(--h);
+    margin-left: calc(var(--w) / -2);
+    margin-top: calc(var(--h) / -2);
+    border-radius: 50% 50% 48% 48%;
+
+    background: linear-gradient(145deg,
+        #ffc4d2 0%,
+        #f78ca8 32%,
+        #d83c70 72%,
+        #8e214b 100%);
+
+    box-shadow:
+        inset -10px -12px 17px #741a4244,
+        inset 5px 5px 14px #ffffff55,
+        0 4px 10px #120b2033;
+
+    transform-origin: 50% 85%;
+
+    transform:
+        rotate(var(--angle))
+        translateY(0)
+        rotateX(80deg)
+        scale(.02);
+
+    opacity: 0;
+
+    animation: bloom var(--duration) var(--delay)
+        cubic-bezier(.16,.8,.25,1) forwards;
+}
+
+.petal::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 15%;
+    width: 2px;
+    height: 65%;
+    background: #ffffff44;
+    border-radius: 50%;
+}
+
+@keyframes bloom {
+    0% {
+        opacity: 0;
+        transform:
+            rotate(var(--angle))
+            translateY(0)
+            rotateX(80deg)
+            scale(.02);
+    }
+
+    50% { opacity: 1; }
+
+    100% {
+        opacity: 1;
+        transform:
+            rotate(var(--angle))
+            translateY(var(--distance))
+            rotateX(var(--tilt))
+            scale(1);
+    }
+}
+
+/* INTI MAWAR TANPA BULAT */
+
+.rose-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 65px;
+    height: 65px;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+}
+
+.core-petal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 34px;
+    height: 48px;
+    margin-left: -17px;
+    margin-top: -24px;
+    border-radius: 50% 50% 45% 45%;
+    background: linear-gradient(140deg,
+        #ffbdcc, #d9366d 80%);
+    transform-origin: 50% 85%;
+    transform: rotate(var(--angle)) translateY(0) scale(.05);
+    opacity: 0;
+    animation: coreBloom 2s var(--delay) forwards;
+}
+
+@keyframes coreBloom {
+    to {
+        opacity: 1;
+        transform:
+            rotate(var(--angle))
+            translateY(var(--distance))
+            scale(1);
+    }
+}
+
+/* BINTANG */
+
+.star {
+    position: absolute;
+    color: #fff2d5;
+    animation: twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: .2; }
+    to { opacity: .9; }
+}
+
+/* TEKS */
+
+.message {
+    position: absolute;
+    bottom: 22px;
+    color: #f9e8d3;
+    font-size: 17px;
+    letter-spacing: 5px;
+    opacity: 0;
+    animation: show 2s 13s forwards;
+}
+
+@keyframes show {
+    to { opacity: 1; }
+}
+
+button {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 27px;
+    border: 1px solid #f8e8d2;
+    border-radius: 30px;
+    background: #ffffff10;
+    color: #fff0df;
+    cursor: pointer;
+    z-index: 30;
+}
+
+button:hover {
+    background: #f8e8d2;
+    color: #253b39;
+}
+
+@media(max-width:650px) {
+    .garden {
+        transform: scale(.65);
+        transform-origin: bottom center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+
+    <div class="moon"></div>
+    <div class="ground"></div>
+
+    <button onclick="restart()">Mekarin lagi</button>
+
+    <div class="garden" id="garden">
+
+        <div class="rose"
+            style="
+                --left: 75px;
+                --height: 390px;
+                --curve: -7deg;
+                --grow-delay: 1s;
+                --leaf-delay: 3.5s;
+                --thorn-delay: 4s;
+                --flower-size: 330px;
+                --flower-delay: 4.5s;
+                --flower-open: 5.5;
+            ">
+            <div class="stem"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+            <div class="thorn left"></div>
+            <div class="thorn right"></div>
+            <div class="flower"></div>
+        </div>
+
+        <div class="rose"
+            style="
+                --left: 225px;
+                --height: 510px;
+                --curve: 2deg;
+                --grow-delay: 1.5s;
+                --leaf-delay: 4s;
+                --thorn-delay: 4.5s;
+                --flower-size: 390px;
+                --flower-delay: 5.5s;
+                --flower-open: 6.5;
+            ">
+            <div class="stem"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+            <div class="thorn left"></div>
+            <div class="thorn right"></div>
+            <div class="flower"></div>
+        </div>
+
+        <div class="rose"
+            style="
+                --left: 375px;
+                --height: 420px;
+                --curve: 8deg;
+                --grow-delay: 2s;
+                --leaf-delay: 4.5s;
+                --thorn-delay: 5s;
+                --flower-size: 345px;
+                --flower-delay: 6.5s;
+                --flower-open: 7.5;
+            ">
+            <div class="stem"></div>
+            <div class="leaf left"></div>
+            <div class="leaf right"></div>
+            <div class="thorn left"></div>
+            <div class="thorn right"></div>
+            <div class="flower"></div>
+        </div>
+
+    </div>
+
+    <div class="message">THREE ROSES FOR YOU</div>
+
+</div>
+
+<script>
+
+// MEMBUAT KELopak
+function createRose(flower, startDelay, size) {
+
+    flower.innerHTML = "";
+
+    const layers = [
+        { count: 12, w: size*.34, h: size*.52, distance: size*.27, tilt: 5, delay: 0 },
+        { count: 11, w: size*.30, h: size*.45, distance: size*.18, tilt: 15, delay: 1 },
+        { count: 10, w: size*.25, h: size*.38, distance: size*.10, tilt: 25, delay: 2 },
+        { count: 8, w: size*.20, h: size*.31, distance: size*.04, tilt: 35, delay: 3 }
+    ];
+
+    layers.forEach((layer, layerIndex) => {
+
+        for (let i = 0; i < layer.count; i++) {
+
+            const petal = document.createElement("div");
+
+            petal.className = "petal";
+
+            const angle =
+                i * (360 / layer.count) + layerIndex * 13;
+
+            petal.style.setProperty("--w", layer.w + "px");
+            petal.style.setProperty("--h", layer.h + "px");
+            petal.style.setProperty("--distance", layer.distance + "px");
+            petal.style.setProperty("--tilt", layer.tilt + "deg");
+            petal.style.setProperty("--angle", angle + "deg");
+
+            petal.style.setProperty(
+                "--delay",
+                (startDelay + layer.delay + i*.07) + "s"
+            );
+
+            petal.style.setProperty("--duration", "3.5s");
+
+            flower.appendChild(petal);
+        }
+    });
+
+    // Inti bunga berupa kelopak kecil menggulung
+    const core = document.createElement("div");
+    core.className = "rose-core";
+
+    for (let i = 0; i < 7; i++) {
+
+        const p = document.createElement("div");
+
+        p.className = "core-petal";
+
+        p.style.setProperty("--angle", (i*51) + "deg");
+        p.style.setProperty("--distance", (i*2) + "px");
+        p.style.setProperty("--delay", (startDelay + 4.5 + i*.12) + "s");
+
+        core.appendChild(p);
+    }
+
+    flower.appendChild(core);
+}
+
+// MEMBUAT TIGA MAWAR
+function makeGarden() {
+
+    const roses = document.querySelectorAll(".rose");
+
+    roses.forEach((rose, index) => {
+
+        const flower = rose.querySelector(".flower");
+
+        const size = [330, 390, 345][index];
+        const delay = [5.5, 6.5, 7.5][index];
+
+        createRose(flower, delay, size);
+    });
+}
+
+// BINTANG
+function makeStars() {
+
+    document.querySelectorAll(".star").forEach(s => s.remove());
+
+    const scene = document.querySelector(".scene");
+
+    for (let i = 0; i < 55; i++) {
+
+        const star = document.createElement("span");
+
+        star.className = "star";
+        star.textContent = "✦";
+
+        star.style.left = Math.random()*100 + "%";
+        star.style.top = Math.random()*75 + "%";
+        star.style.fontSize = (5 + Math.random()*8) + "px";
+        star.style.animationDelay = Math.random()*3 + "s";
+
+        scene.appendChild(star);
+    }
+}
+
+// MENGULANG ANIMASI
+function restart() {
+
+    const garden = document.getElementById("garden");
+    const message = document.querySelector(".message");
+
+    garden.style.display = "none";
+    message.style.animation = "none";
+
+    void garden.offsetWidth;
+
+    garden.style.display = "block";
+    message.style.animation = "show 2s 13s forwards";
+
+    makeGarden();
+    makeStars();
+}
+
+makeGarden();
+makeStars();
+
+</script>
+
+</body>
+</html>
